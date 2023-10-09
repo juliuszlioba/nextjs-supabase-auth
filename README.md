@@ -6,11 +6,12 @@ Sample project showing how to add authentication to [Next.js](https://nextjs.org
 
 Project is based on Mykhaylo Ryechkin's [source code repository](https://github.com/mryechkin/nextjs-supabase-auth/blob/main/README.md), only rewritten in TypeScript and adjusted to my needs.
 
-This project is a supplement to [this guide](https://misha.wtf/blog/supabase-auth-next-13-pkce) (See the link for a detailed tutorial).
 
-### Source Inspiration
+### Source
 
 [Mykhaylo Ryechkin's GitHub](https://github.com/mryechkin/nextjs-supabase-auth/blob/main/README.md)
+
+This source project [guide](https://misha.wtf/blog/supabase-auth-next-13-pkce).
 
 ### License
 
