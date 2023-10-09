@@ -7,6 +7,8 @@ import { Field, Form, Formik } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
 
+import type { Database } from "@/lib/database.types";
+
 const SignInSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string().required("Required"),
@@ -18,7 +20,7 @@ interface SignInFormValues {
 }
 
 const SignIn = () => {
-  const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient<Database>();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   async function signIn(formData: SignInFormValues) {

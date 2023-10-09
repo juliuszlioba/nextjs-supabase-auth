@@ -34,7 +34,34 @@ export interface Database {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          id: string
+          role: string | null
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          id: string
+          role?: string | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          id?: string
+          role?: string | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never

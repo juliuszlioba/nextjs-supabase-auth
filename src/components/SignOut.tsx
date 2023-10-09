@@ -2,8 +2,10 @@
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
+import type { Database } from "@/lib/database.types";
+
 export default function SignOut() {
-  const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient<Database>();
 
   async function handleSignOut() {
     const { error } = await supabase.auth.signOut();

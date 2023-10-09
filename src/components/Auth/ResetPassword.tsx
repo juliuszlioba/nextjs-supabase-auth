@@ -7,6 +7,8 @@ import { Field, Form, Formik } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
 
+import type { Database } from "@/lib/database.types";
+
 const ResetPasswordSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
 });
@@ -16,7 +18,7 @@ interface ResetPasswordFormValues {
 }
 
 const ResetPassword = () => {
-  const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient<Database>();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 

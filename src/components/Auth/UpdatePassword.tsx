@@ -7,6 +7,8 @@ import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
 
+import type { Database } from "@/lib/database.types";
+
 const UpdatePasswordSchema = Yup.object().shape({
   password: Yup.string().required("Required"),
 });
@@ -16,7 +18,7 @@ interface UpdatePasswordFormValues {
 }
 
 const UpdatePassword = () => {
-  const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient<Database>();
   const router = useRouter();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 

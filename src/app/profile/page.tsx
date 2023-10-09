@@ -25,10 +25,12 @@ export default async function Profile() {
       <code className="highlight">
         {user.last_sign_in_at && new Date(user.last_sign_in_at).toUTCString()}
       </code>
-      <Link className="button" href="/">
-        Go Home
-      </Link>
-      <SignOut />
+      <div className="flex gap-2">
+        <Link className="button" href="/">
+          Go Home
+        </Link>
+        <SignOut />
+      </div>
     </div>
   );
 }
