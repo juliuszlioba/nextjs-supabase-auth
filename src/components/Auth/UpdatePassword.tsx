@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import cn from "classnames";
-import { Field, Form, Formik } from "formik";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
 
@@ -22,6 +23,17 @@ const UpdatePassword = () => {
   const router = useRouter();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<UpdatePasswordFormValues>({
+    resolver: yupResolver(UpdatePasswordSchema),
+  });
+
+  const onSubmit: SubmitHandler<UpdatePasswordFormValues> = (data) =>
+    updatePassword(data);
+
   async function updatePassword(formData: UpdatePasswordFormValues) {
     const { error } = await supabase.auth.updateUser({
       password: formData.password,
@@ -37,35 +49,25 @@ const UpdatePassword = () => {
 
   return (
     <div className="card">
-      <h2 className="w-full text-center">Update Password</h2>
-      <Formik
-        initialValues={{
-          password: "",
-        }}
-        validationSchema={UpdatePasswordSchema}
-        onSubmit={updatePassword}
-      >
-        {({ errors, touched }) => (
-          <Form className="grid gap-2 w-full">
-            <label htmlFor="password">New Password</label>
-            <Field
-              className={cn(
-                "input",
-                errors.password && touched.password && "input-error"
-              )}
-              id="password"
-              name="password"
-              type="password"
-            />
-            {errors.password && touched.password ? (
-              <div className="text-red-600">{errors.password}</div>
-            ) : null}
-            <button className="button w-full" type="submit">
-              Update Password
-            </button>
-          </Form>
-        )}
-      </Formik>
+      <h2 className="w-full text-center text-xl">Update Password</h2>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2 w-full">
+        <label htmlFor="password">New Password</label>
+        <input
+          {...register("password")}
+          placeholder="min 6 characters"
+          type="password"
+          className={cn("input", errors.password && "input-error")}
+        />
+        {errors.password ? (
+          <div className="text-red-600">{errors.password.message}</div>
+        ) : null}
+
+        <button className="button w-full" type="submit">
+          Submit
+        </button>
+      </form>
+
       {errorMsg && <div className="text-red-600">{errorMsg}</div>}
     </div>
   );

@@ -19,7 +19,7 @@ export default async function Profile() {
 
   return (
     <div className="card">
-      <h2>User Profile</h2>
+      <h2 className="w-full text-center text-xl">User Profile</h2>
       <code className="highlight">{user.email}</code>
       <div className="heading">Last Signed In:</div>
       <code className="highlight">

@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import cn from "classnames";
-import { Field, Form, Formik } from "formik";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
 import * as Yup from "yup";
 
@@ -22,6 +23,17 @@ const ResetPassword = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<ResetPasswordFormValues>({
+    resolver: yupResolver(ResetPasswordSchema),
+  });
+
+  const onSubmit: SubmitHandler<ResetPasswordFormValues> = (data) =>
+    resetPassword(data);
+
   async function resetPassword(formData: ResetPasswordFormValues) {
     const { error } = await supabase.auth.resetPasswordForEmail(
       formData.email,
@@ -39,38 +51,32 @@ const ResetPassword = () => {
 
   return (
     <div className="card">
-      <h2 className="w-full text-center">Forgot Password</h2>
-      <Formik
-        initialValues={{
-          email: "",
-        }}
-        validationSchema={ResetPasswordSchema}
-        onSubmit={resetPassword}
-      >
-        {({ errors, touched }) => (
-          <Form className="grid gap-2 w-full">
-            <label htmlFor="email">Email</label>
-            <Field
-              className={cn("input", errors.email && "input-error")}
-              id="email"
-              name="email"
-              placeholder="jane@acme.com"
-              type="email"
-            />
-            {errors.email && touched.email ? (
-              <div className="text-red-600">{errors.email}</div>
-            ) : null}
-            <button className="button w-full" type="submit">
-              Send Instructions
-            </button>
-          </Form>
-        )}
-      </Formik>
+      <h2 className="w-full text-center text-xl">Forgot Password</h2>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2 w-full">
+        <label htmlFor="email">Email</label>
+        <input
+          {...register("email")}
+          placeholder="email@adress.com"
+          className={cn("input", errors.email && "input-error")}
+        />
+        {errors.email ? (
+          <div className="text-red-600">{errors.email.message}</div>
+        ) : null}
+
+        <button className="button w-full" type="submit">
+          Send Instructions
+        </button>
+      </form>
+
       {errorMsg && <div className="text-center text-red-600">{errorMsg}</div>}
       {successMsg && <div className="text-center text-black">{successMsg}</div>}
-      <Link href="/sign-in" className="link">
-        Remember your password? Sign In.
-      </Link>
+
+      <div className="border-t-2 dark:border-gray-700 border-gray-300 pt-4 w-full text-center">
+        <Link href="/sign-in" className="link">
+          Remember your password? Sign In.
+        </Link>
+      </div>
     </div>
   );
 };

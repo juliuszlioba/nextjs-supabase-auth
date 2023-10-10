@@ -24,7 +24,7 @@ export default async function Home() {
 
   return (
     <div className="card">
-      <h2>Welcome!</h2>
+      <h2 className="w-full text-center text-xl">Welcome!</h2>
       <code className="highlight">
         {user.role} : {profile?.role}
       </code>
