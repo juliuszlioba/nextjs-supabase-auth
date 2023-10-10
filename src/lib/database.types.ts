@@ -34,28 +34,25 @@ export interface Database {
   }
   public: {
     Tables: {
-      profiles: {
+      users: {
         Row: {
           id: string
-          role: string | null
-          updated_at: string | null
+          permission: Database["public"]["Enums"]["user_permission"]
           username: string | null
         }
         Insert: {
           id: string
-          role?: string | null
-          updated_at?: string | null
+          permission: Database["public"]["Enums"]["user_permission"]
           username?: string | null
         }
         Update: {
           id?: string
-          role?: string | null
-          updated_at?: string | null
+          permission?: Database["public"]["Enums"]["user_permission"]
           username?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "profiles_id_fkey"
+            foreignKeyName: "users_id_fkey"
             columns: ["id"]
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -70,7 +67,7 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      user_permission: "SUBSCRIBER" | "USER" | "ADMIN"
     }
     CompositeTypes: {
       [_ in never]: never

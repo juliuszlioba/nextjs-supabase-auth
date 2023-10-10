@@ -70,7 +70,9 @@ const ResetPassword = () => {
       </form>
 
       {errorMsg && <div className="text-center text-red-600">{errorMsg}</div>}
-      {successMsg && <div className="text-center text-black">{successMsg}</div>}
+      {successMsg && (
+        <div className="text-blue-700 dark:text-blue-700">{successMsg}</div>
+      )}
 
       <div className="border-t-2 dark:border-gray-700 border-gray-300 pt-4 w-full text-center">
         <Link href="/sign-in" className="link">

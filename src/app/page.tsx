@@ -16,9 +16,9 @@ export default async function Home() {
     redirect("/sign-in");
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
+  const { data: users } = await supabase
+    .from("users")
+    .select("permission")
     .eq("id", user.id)
     .single();
 
@@ -26,7 +26,7 @@ export default async function Home() {
     <div className="card">
       <h2 className="w-full text-center text-xl">Welcome!</h2>
       <code className="highlight">
-        {user.role} : {profile?.role}
+        {user.role} : {users?.permission}
       </code>
       <div className="flex gap-2">
         <Link className="button" href="/profile">
