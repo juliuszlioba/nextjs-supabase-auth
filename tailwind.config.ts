@@ -2,6 +2,8 @@ import type { Config } from 'tailwindcss'
 const colors = require("tailwindcss/colors");
 const forms = require("@tailwindcss/forms");
 
+const { fontFamily } = require("tailwindcss/defaultTheme");
+
 const config: Config = {
   darkMode: "class",
   content: [
@@ -21,7 +23,11 @@ const config: Config = {
       blue: colors.blue,
       yellow: colors.yellow,
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+      },
+    },
   },
   plugins: [forms],
 };

@@ -1,13 +1,10 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import supabaseServerClient from "@/lib/supabase";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import SignOut from "@/components/SignOut";
 
-import type { Database } from "@/lib/database.types";
-
 export default async function Home() {
-  const supabase = createServerComponentClient<Database>({ cookies });
+  const supabase = await supabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

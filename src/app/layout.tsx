@@ -1,21 +1,16 @@
 import type { Metadata } from "next";
 
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import supabaseServerClient from "@/lib/supabase";
 import AuthProvider from "@/components/AuthProvider";
-import { Inter } from "next/font/google";
 
 import "../styles/globals.css";
 import ThemeToggle from "@/components/ThemeToggle";
 import { getCurrentTheme } from "@/lib/colorTheme";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
+import { GeistSans } from "geist/font/sans";
 
 // do not cache this layout
-export const revalidate = 0;
+// export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Next.js with Supabase Auth",
@@ -27,7 +22,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = await supabaseServerClient();
 
   const {
     data: { session },
@@ -37,8 +32,11 @@ export default async function RootLayout({
   const theme = await getCurrentTheme();
 
   return (
-    <html lang="en" className={theme === "dark" ? "dark" : ""}>
-      <body className={inter.className}>
+    <html
+      lang="en"
+      className={`${GeistSans.variable} ${theme === "dark" ? "dark" : ""}`}
+    >
+      <body>
         <AuthProvider accessToken={accessToken}>
           <div className="flex min-h-screen flex-col items-center justify-between p-24">
             {children}
