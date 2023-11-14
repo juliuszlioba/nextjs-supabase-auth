@@ -1,16 +1,16 @@
-// More info: https://supabase.com/docs/guides/auth/server-side/email-based-auth-with-pkce-flow-for-ssr?framework=nextjs
+//! Required to Update email templates with URL for API endpoint
+//! More info https://supabase.com/docs/guides/auth/server-side/email-based-auth-with-pkce-flow-for-ssr
 
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { type EmailOtpType } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 import type { Database } from "@/lib/database.types";
-import { EmailOtpType } from "@supabase/supabase-js";
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
   const token_hash = searchParams.get("token_hash");
-  const type = searchParams.get("type") as EmailOtpType;
+  const type = searchParams.get("type") as EmailOtpType | null;
   const next = searchParams.get("next") ?? "/";
 
   if (token_hash && type) {
@@ -27,17 +27,21 @@ export async function GET(req: NextRequest) {
             cookieStore.set({ name, value, ...options });
           },
           remove(name: string, options: CookieOptions) {
-            cookieStore.set({ name, value: "", ...options });
+            cookieStore.delete({ name, ...options });
           },
         },
       }
     );
-    const { error } = await supabase.auth.verifyOtp({ type, token_hash });
+
+    const { error } = await supabase.auth.verifyOtp({
+      type,
+      token_hash,
+    });
     if (!error) {
-      return NextResponse.redirect(new URL(`/${next.slice(1)}`, req.url));
+      return NextResponse.redirect(new URL(`/${next.slice(1)}`, request.url));
     }
   }
 
   // return the user to an error page with some instructions
-  return NextResponse.redirect(new URL("/auth/auth-error", req.url));
+  return NextResponse.redirect(new URL("/auth/auth-error", request.url));
 }
